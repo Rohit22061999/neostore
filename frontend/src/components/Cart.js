@@ -3,6 +3,8 @@ import { Container, Button, Table } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import { getcartinfo } from '../config/Myservices'
 import jwt_decode from "jwt-decode";
+import { useDispatch } from 'react-redux'
+
 
 
 export default function Cart() {
@@ -12,6 +14,7 @@ export default function Cart() {
     const [ordertotal, setOrdertotal] = useState(0)
     const [userdetail, setUserdetail] = useState({})
     const navigate = useNavigate()
+    const cartdispatch = useDispatch()
 
     useEffect(() => {
 
@@ -85,8 +88,13 @@ export default function Cart() {
         tmp.splice(index, 1)
         setItems([...tmp])
         localStorage.setItem('cart', JSON.stringify([...tmp]))
+        cartdispatch({ type: 'iscart' })
+        let item = (tmp.reduce((sum, ele) => sum += Number(ele.product_cost) * Number(ele.quantity), 0))
 
-        setG(tmp.reduce((sum, ele) => sum += Number(ele.product_cost) * Number(ele.quantity), 0))
+        setG(item)
+        setGst(Math.ceil(0.05 * item))
+        setOrdertotal(Math.ceil(item + 0.05 * item))
+
 
     }
 

@@ -3,7 +3,7 @@ import { Carousel, Container, Row, Col, Collapse, Card, Button, Form } from 'rea
 import { getproducts } from '../config/Myservices';
 import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { Rating } from 'react-simple-star-rating'
-
+import { useDispatch } from 'react-redux'
 
 
 export default function Home() {
@@ -11,6 +11,8 @@ export default function Home() {
     const [product, setProduct] = useState([])
     const location = useLocation()
     const navigate = useNavigate()
+    const cartdispatch = useDispatch()
+
 
     useEffect(() => {
         getproducts(location.search).then(res => {
@@ -37,10 +39,15 @@ export default function Home() {
             if (tmp.filter(ele => ele._id == element._id).length === 0) {
                 tmp.push({ ...element, quantity: 1 })
                 localStorage.setItem('cart', JSON.stringify(tmp))
+                cartdispatch({ type: 'iscart' })
+
+
             }
         }
         else {
             localStorage.setItem('cart', JSON.stringify([{ ...element, quantity: 1 }]))
+            cartdispatch({ type: 'iscart' })
+
         }
     }
 

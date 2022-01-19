@@ -59,8 +59,10 @@ app.post('/login', (req, res) => {
         else {
             console.log(data)
             let payload = {
-                uid: data.email
+                uid: data.email,
+                account: data.type
             }
+            console.log(payload, "1")
             const token = jwt.sign(payload, jwtSecret, { expiresIn: 36000000 })
             bcrypt.compare(req.body.password, data.password, function (err, result) {
                 console.log(result)
@@ -113,7 +115,8 @@ app.post('/sociallogin', (req, res) => {
                 console.log(verify)
                 if (verify.data.verified_email != undefined && verify.data.verified_email == true) {
                     let payload = {
-                        uid: req.body._profile.email
+                        uid: req.body._profile.email,
+                        account: 'social'
                     }
                     const token = jwt.sign(payload, jwtSecret, { expiresIn: 360000 })
                     res.send({ 'err': 0, 'msg': "login success", 'token': token })
@@ -342,7 +345,6 @@ app.post('/setcart', (req, res) => {
     })
 })
 
-
 app.post('/setorder', (req, res) => {
     console.log(req.body)
     let inc = new orderModel(req.body)
@@ -357,7 +359,7 @@ app.post('/setorder', (req, res) => {
 
 app.post('/getorder', (req, res) => {
     console.log(req.body)
-    orderModel.find({ email: req.body.email }, (err, data) => {
+    orderModel.find({ buyer: req.body.email }, (err, data) => {
         if (err) throw err;
         else {
             console.log(data)

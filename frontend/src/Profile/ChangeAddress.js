@@ -35,6 +35,8 @@ export default function ChangeAddress() {
 
         }
         else {
+            navigate('/home')
+
 
         }
 
@@ -129,10 +131,6 @@ export default function ChangeAddress() {
                             console.log(res.data)
                             setUserdetail(res.data)
                         })
-
-                    }
-                    if (res.data.err == 0) {
-                        navigate('/home')
                     }
                     else {
                         alert(res.data.msg)

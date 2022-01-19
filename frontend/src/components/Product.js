@@ -4,6 +4,8 @@ import { getproducts, getCategory, getColor } from '../config/Myservices';
 import ReactPaginate from 'react-paginate';
 import { useNavigate, useLocation } from 'react-router-dom'
 import { Rating } from 'react-simple-star-rating'
+import { useDispatch } from 'react-redux'
+
 
 
 
@@ -16,6 +18,8 @@ export default function Product() {
     // const [cart, setCart] = useState([])
     const location = useLocation();
     const navigate = useNavigate(0);
+    const cartdispatch = useDispatch()
+
 
     useEffect(() => {
         getproducts(location.search).then(res => {
@@ -50,11 +54,16 @@ export default function Product() {
             if (tmp.filter(ele => ele._id == element._id).length === 0) {
                 tmp.push({ ...element, quantity: 1 })
                 localStorage.setItem('cart', JSON.stringify(tmp))
+                cartdispatch({ type: 'iscart' })
+
             }
         }
         else {
             localStorage.setItem('cart', JSON.stringify([{ ...element, quantity: 1 }]))
+            cartdispatch({ type: 'iscart' })
+
         }
+
     }
 
     const sortByRating = () => {

@@ -3,3 +3,9 @@ export const isuser = () => {
         type: 'isuser'
     }
 }
+
+export const iscart = () => {
+    return {
+        type: 'iscart'
+    }
+}
